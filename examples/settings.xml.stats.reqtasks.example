@@ -1,0 +1,86 @@
+<?xml version='1.0'?>
+<settings>
+  <parameters>
+    <cluster>elmo</cluster>
+    <start>2011-02-01T00:00:00</start>
+    <end>2011-02-28T23:59:59</end>
+  </parameters>
+
+  <cluster name="itasca" cores_per_node = "8" max_wallclock="24" node_prefix="node" node_offset="1" nodes="1091">
+    <database>
+      <dbi>dbi:SQLite:/project/msica/data/itasca_data.dbl</dbi>
+    </database>
+    <log parser="Moab" logdir="/project/logs/moab/itasca" />
+  </cluster>
+  <cluster name="calhoun" cores_per_node = "8" max_wallclock="96" node_prefix="cl1n" node_offset="1" nodes="256">
+    <database>
+      <dbi>dbi:SQLite:/project/msica/data/calhoun_data.dbl</dbi>
+    </database>
+    <log parser="Moab" logdir="/project/logs/moab/calhoun" />
+  </cluster>
+  <cluster name="blade" cores_per_node = "4" max_wallclock="300" node_prefix="blade" node_offset="1" nodes="283">
+    <database>
+      <dbi>dbi:SQLite:/project/msica/data/blade_data.dbl</dbi>
+    </database>
+    <log parser="Moab" logdir="/project/logs/moab/bladecenter" />
+  </cluster>
+  <cluster name="elmo" cores_per_node = "32" max_wallclock="150">
+    <database>
+      <dbi>dbi:SQLite:/project/msica/data/elmo_data.dbl</dbi>
+    </database>
+    <log parser="Moab" logdir="/project/logs/moab/elmo" />
+    <node name="elmo01" />
+    <node name="elmo02" />
+    <node name="elmo03" />
+    <node name="elmo04" />
+    <node name="elmo05" />
+    <node name="elmo06" />
+  </cluster>
+
+  <stats min_runtime="600">
+    <section title="Summary Data" bin_label="Requested Tasks Range">
+      <bin label="0-1" field="reqtasks" start="0" end="1" />
+      <bin label="2-8" field="reqtasks" start="1" end="8" />
+      <bin label="9-64" field="reqtasks" start="8" end="64" />
+      <bin label="65-512" field="reqtasks" start="64" end="512" />
+      <bin label="513-4096" field="reqtasks" start="512" end="4096" />
+      <bin label="4097+" field="reqtasks" start="4096" />
+    </section>
+
+    <section title="College Data" bin_label="Requested Tasks Range" group_by="college" order_by="jobs" desc="1">
+      <bin label="0-1" field="reqtasks" start="0" end="1" />
+      <bin label="2-8" field="reqtasks" start="1" end="8" />
+      <bin label="9-64" field="reqtasks" start="8" end="64" />
+      <bin label="65-512" field="reqtasks" start="64" end="512" />
+      <bin label="513-4096" field="reqtasks" start="512" end="4096" />
+      <bin label="4097+" field="reqtasks" start="4096" />
+    </section>
+
+    <section title="Department Data" bin_label="Requested Tasks Range" group_by="department, college" order_by="jobs" desc="1">
+      <bin label="0-1" field="reqtasks" start="0" end="1" />
+      <bin label="2-8" field="reqtasks" start="1" end="8" />
+      <bin label="9-64" field="reqtasks" start="8" end="64" />
+      <bin label="65-512" field="reqtasks" start="64" end="512" />
+      <bin label="513-4096" field="reqtasks" start="512" end="4096" />
+      <bin label="4097+" field="reqtasks" start="4096" />
+    </section>
+
+    <section title="Group Data" bin_label="Requested Tasks Range" group_by="groupid" order_by="jobs" desc="1">
+      <bin label="0-1" field="reqtasks" start="0" end="1" />
+      <bin label="2-8" field="reqtasks" start="1" end="8" />
+      <bin label="9-64" field="reqtasks" start="8" end="64" />
+      <bin label="65-512" field="reqtasks" start="64" end="512" />
+      <bin label="513-4096" field="reqtasks" start="512" end="4096" />
+      <bin label="4097+" field="reqtasks" start="4096" />
+    </section>
+
+    <section title="User Data" bin_label="Requested Tasks Range" group_by="userid" order_by="jobs" desc="1">
+      <bin label="0-1" field="reqtasks" start="0" end="1" />
+      <bin label="2-8" field="reqtasks" start="1" end="8" />
+      <bin label="9-64" field="reqtasks" start="8" end="64" />
+      <bin label="65-512" field="reqtasks" start="64" end="512" />
+      <bin label="513-4096" field="reqtasks" start="512" end="4096" />
+      <bin label="4097+" field="reqtasks" start="4096" />
+    </section>
+  </stats>
+</settings>

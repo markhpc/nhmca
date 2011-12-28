@@ -1,0 +1,72 @@
+INTRODUCTION
+
+NHMCA Version 0.1 Alpha
+
+INTRODUCTION
+
+NHMCA is a perl program with a number of plugins that can create graphs and 
+tables of information about cluster utilization.  Data can currently be read
+in from moab, torque, and collectl.  Cluster parameters and defualt run
+parameters are stored in an XML file and recorded data is stored in an sqlite
+database.  Examples of the kinds of things that NHMCA can be used for:
+
+- Graph many different aspects of cluster utilization by job or per-node 
+  resource utlization using dynamically configurable line charts and heatmaps.
+  Graphs can be created on a per job, per user, or per group basis.
+- Create reports of jobs run over a specific date range and binned by 
+  arbitrary clasffication filters.
+- Monitor IO behavior on storage clusters (ie Lustre, Gluster, or Ceph).
+
+PREREQUISITES
+
+You will need several extra perl modules to use NHMCA:
+
+XML::Simple
+GD
+DBI
+DateTime
+DateTime::Format
+
+Depending on the database specified in the configuration file you may need to
+install additional modules.  NHMCA is known to work with both sqlite3 and mysql
+5.0.  Other SQL databases including postgresql may not work out of the box.
+
+INSTALLATION:
+
+Take one of the example settings files from the examples directory and modify 
+it to suit your own cluster(s).  
+
+The configuration file has multiple sections:
+
+1) parameters - Defualt command-line options
+2) cluster - Declaration of a cluster to monitor (repeatable)
+3) stats - defintion of the statistics to generate for job usage reports.
+4) graphs - grouping of declaration of graphs to generate.
+
+Please note that clusters must currently have homogenous nodes.  Each group
+of common nodes in a heterogenous cluster will need to be treated as a separate
+cluster for the moment.  This will likely be changed in a later release.
+
+The configuration file to use can be specified on the command line when nhmca 
+is executed, but may also be copied to ~/.nhmca/settings.xml or 
+/etc/nhmca/settings.xml and be read by default.
+
+EXECUTION:
+
+please run nhmca.pl --help to see a list of the command line options that are
+available.
+
+TODO:
+
+- Fix various bugs and clean up code.
+- Cleaup and standardize XML configuration file format.
+- Write real documentation.
+- Refactor chart drawing code.  Investigate various html5/js frontend options.
+- Support heterogenous cluster configurations.
+- Investigate faster ways to generate graphs and parse collectl data.
+- Create a daemon and data collector for performance counter data using perf.
+- look into faster/better schemes for storing vast amounts of per-process and
+  performance counter data.
+- associate job, collectl, and performance counter data for broad performance
+  analysis studies for every user-spawned executable running on clusters.
+

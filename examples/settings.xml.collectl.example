@@ -1,0 +1,194 @@
+<?xml version='1.0'?>
+<settings>
+  <parameters>
+    <cluster>itasca_storage</cluster>
+    <start>2010-09-14T12:37:00-05</start>
+    <end>2010-09-14T16:05:25-05</end>
+  </parameters>
+
+  <cluster name="itasca_storage" cores_per_node="8">
+    <database>
+      <dbi>dbi:SQLite:/project/msica/data/itasca_ior_data.dbl</dbi>
+    </database>
+    <log parser="CollectlIO" logdir="/project/collectl/itasca_ior_test" />
+    <log parser="CollectlCPU" logdir="/project/collectl/itasca_ior_test" />
+    <log parser="CollectlMem" logdir="/project/collectl/itasca_ior_test" />
+
+    <node name="jr5-1-1" />
+    <node name="jr5-1-2" />
+    <node name="jr5-1-3" />
+    <node name="jr5-1-4" />
+    <node name="jr5-2-1" />
+    <node name="jr5-2-2" />
+    <node name="jr5-2-3" />
+    <node name="jr5-2-4" />
+
+    <disk name ="sdc" />
+    <disk name ="sdd" />
+    <disk name ="sde" />
+    <disk name ="sdf" />
+    <disk name ="sdg" />
+    <disk name ="sdh" />
+  </cluster>
+
+  <graphs>
+    <width>1412</width>
+
+    <colors>
+      <background>#FFFFFF</background>
+      <text>#000000</text>
+      <grid>#000000</grid>
+    </colors>
+
+    <margins>
+      <left>64</left>
+      <right>320</right>
+      <top>32</top>
+      <bottom>36</bottom>
+      <chart>28</chart>
+    </margins>
+    <queue_wait_threshold>1209600</queue_wait_threshold>
+
+    <graph type="HeatMap" mode="disk" name="" ylabel="OST" zlabel="MBytes/s">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlIOReadSpeed" color_function="Heat" mode="percent" label="Per OST disk read speed"/>
+    </graph>
+
+    <graph type="HeatMap" mode="disk" name="" ylabel="OST" zlabel="MBytes/s">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlIOWriteSpeed" color_function="Heat" label="Per OST disk write speed"/>
+    </graph>
+
+    <graph type="HeatMap" mode="disk" name="" ylabel="OST" zlabel="MBytes/s">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlIOReadSpeed" color_function="Opacity" color="#FF0000" label="Per OST disk read speed"/>
+      <input collector="CollectlIOWriteSpeed" color_function="Opacity" color="#0000FF" label="Per OST disk write speed"/>
+    </graph>
+
+    <graph type="LineChart" name="Disk Speed" ylabel="MBytes/s">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Total" color="#FF0000" collector="CollectlIOReadSpeed" label="Disk read speed across all OSTS" />
+      <line fill="true" function="Total" color="#0000FF" collector="CollectlIOWriteSpeed" label="Disk write speed across all OSTS" />
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="HeatMap" mode="disk" name="" ylabel="OST" zlabel="IOs">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlIOReads" color_function="Opacity" color="#FF0000" label="Reads"/>
+      <input collector="CollectlIOWrites" color_function="Opacity" color="#0000FF" label="Writes"/>
+    </graph>
+
+    <graph type="LineChart" name="Operations" ylabel="IOs">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#FF0000" collector="CollectlIOReads" label="Average number of reads per OST" />
+      <line fill="true" function="Average" color="#0000FF" collector="CollectlIOWrites" label="Average number of writes per OST" />
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="HeatMap" mode="disk" name="" ylabel="OST" zlabel="KBytes">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlIORequest" color_function="Opacity" color="#0000FF" label="Average combined I/O size"/>
+    </graph>
+
+    <graph type="LineChart" name="Combined read and write I/O size in KBytes" ylabel="KBytes">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" color="#00FF00" function="WeightedAverage" label="Average per OST I/O size weighted by I/O count">
+        <datagroup collector="CollectlIORequest" />
+        <datagroup function="Add">
+          <datagroup collector="CollectlIOReads" />
+          <datagroup collector="CollectlIOWrites" />
+        </datagroup>
+      </line> 
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="LineChart" name="number of queued disk requests" ylabel="Requests">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlIOQueLen" />
+    </graph>
+    <graph type="LineChart" name="time a request has been waiting in the queue" ylabel="milliseconds" >
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlIOWait" />
+    </graph>
+    <graph type="LineChart" name="time for a request to  be serviced by the device" ylabel="milliseconds" >
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlIOServiceTime" />
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="HeatMap" mode="core" name="" ylabel="Core" zlabel="Percent">
+      <height>128</height>
+      <rows>8</rows>
+      <input collector="CollectlCPUUsage" color_function="Opacity" color="#0000FF" label="OSS core utilization"/>
+    </graph>
+
+    <graph type="LineChart" name="Core Utilization" ylabel="Percent" max="100">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlCPUUsage" />
+    </graph>
+
+    <graph type="LineChart" name="CPU time during which I/O requests were issued" ylabel="Percent" max="100">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlIOUtil" />
+    </graph>
+
+    <graph type="LineChart" name="Time CPU spent idle during outstanding disk I/O" ylabel="Percent" max="100">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlCPUWait" />
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="HeatMap" mode="core" name="" ylabel="Core" zlabel="interrupts">
+      <height>128</height>
+      <rows>8</rows>
+      <input collector="CollectlCPUInterrupts" color_function="Opacity" color="#0000FF" label="Interrupts"/>
+    </graph>
+
+    <graph type="LineChart" name="Aggregate number of interrupts">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlCPUInterrupts" />
+    </graph>
+
+    <graph type="LineChart" name="CPU time spent processing interrupts" ylabel="Percent" max="100">
+      <height>72</height>
+      <rows>5</rows>
+      <line fill="true" function="Average" color="#00FF00" collector="CollectlCPUIRQ" />
+    </graph>
+
+    <graph type="Break" />
+
+    <graph type="HeatMap" mode="node" name="" ylabel="OSS" zlabel="MBytes">
+      <height>96</height>
+      <rows>8</rows>
+      <input collector="CollectlMemUsed" color_function="Opacity" color="#0000FF" label="OSS Memory Utilization"/>
+    </graph>
+
+    <graph type="LineChart" name="OSS Memory Utilization" ylabel="MBytes">
+      <height>72</height>
+      <rows>5</rows>
+      <line function="Average" color="#00FF00" collector="CollectlMemUsed" label="Average OSS memory utilization"/>
+      <line function="Average" color="#FF0000" collector="CollectlMemCached" label="Average OSS cached memory utilization" />
+      <line function="Average" color="#0000FF" collector="CollectlMemCommit" label="Average OSS commit memory utilization" />
+    </graph>
+  </graphs>
+</settings>
